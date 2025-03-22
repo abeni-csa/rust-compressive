@@ -1,3 +1,24 @@
+
+use std::fs::File;
+use std::io::ErrorKind;
+
+fn file_main() {
+    let greeting_file_result = File::open("hello.txt");
+    let greeting_file = match greeting_file_result {
+        Ok(file) => file,
+        Err(s_err) => match s_err.kind() {
+            ErrorKind::NotFound => match File::create("hello.txt") {
+                Ok(fc) => fc,
+                Err(e) => panic!("Problem creaitng file {e:#?} form panic macro"),
+            },
+            other_error => {
+                panic!("Problem creaitng file {other_error:#?} form panic macro");
+            }
+        },
+    };
+    println!("finally {greeting_file:#?}")
+}
+
 fn main() {
     let vector = vec![1, 2, 3, 4, 5, 6];
     let third: &i32 = &vector[2];
@@ -64,3 +85,4 @@ enum SpreadsheetCell {
     Float(f64),
     Text(String),
 }
+ use std::fs::File;                                                                 1  use std::io::ErrorKind;                                                            3                                                                                     1  fn main() {                                                                        2      let greeting_file_result = File::open("hello.txt");                            3      let greeting_file = match greeting_file_result {                               4          Ok(file) => file,                                                          5          Err(s_err) => match s_err.kind() {                                         6              ErrorKind::NotFound => match File::create("hello.txt") {               7                  Ok(fc) => fc,                                                      8                  Err(e) => panic!("Problem creaitng file {e:#?} form panic macro    9              },                                                                    10              other_error => {                                                      11                  panic!("Problem creaitng file {other_error:#?} form panic macro   12              }                                                                     13          },                                                                        14      };                                                                            15      println!("finally {greeting_file:#?}")                                        16  }                                                                                  ~                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                        
