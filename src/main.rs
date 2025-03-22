@@ -1,6 +1,18 @@
 
 use std::fs::File;
 use std::io::ErrorKind;
+fn another_way() {
+    let greeting_file = File::open("hellows.txt").unwrap_or_else(|error| {
+        if error.kind() == ErrorKind::NotFound {
+            File::create("hellows.txt").unwrap_or_else(|error| {
+                panic!("Problem when creating file: {error:?}");
+            })
+        } else {
+            panic!("Problem opning a file {error:?}");
+        }
+    });
+    println!("finally {greeting_file:#?} from another_way() .");
+}
 
 fn main() {
     let greeting_file_result = File::open("hello.txt");
@@ -16,6 +28,7 @@ fn main() {
             }
         },
     };
-    println!("finally {greeting_file:#?}")
+    println!("finally {greeting_file:#?}");
+    another_way();
 }
 
