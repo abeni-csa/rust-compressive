@@ -1,39 +1,61 @@
-#[derive(Debug)]
-struct Point<T> {
-    _x: T,
-    _y: T,
+struct Sheep {
+    naked: bool,
+    name: &'static str,
 }
-impl<T> Point<T> {
-    fn x(&self) -> &T {
-        &self._x
+trait Animal {
+    // Associated function signature; `Self` refes to the implemetor type
+    fn new(name: &'static str) -> Self;
+    // Method signatures; these will return a string
+    fn name(&self) -> &'static str;
+    fn noise(&self) -> &'static str;
+    // these can provide defualt methond definitions
+    fn talk(&self) {
+        println!("{} says {}", self.name(), self.noise())
     }
 }
-impl Point<f32> {
-    fn distance_from_origin(&self) -> f32 {
-        (self._x.powi(2) + self._y.powi(2)).sqrt()
+impl Sheep {
+    fn is_naked(&self) -> bool {
+        self.naked
     }
-}
-
-fn largest<T: std::cmp::PartialOrd>(list: &[T]) -> &T {
-    let mut largest = &list[0];
-    for item in list {
-        if item > largest {
-            largest = item;
+    fn shear(&mut self) {
+        if self.is_naked() {
+            // implementor methods can use implementor's trait methods.
+            println!("{} is alredy neked", self.name());
+        } else {
+            println!("{} gets a hairtuct!", self.name);
+            self.naked = true;
         }
     }
-    largest
+}
+// implint Animal for Sheep
+impl Animal for Sheep {
+    // `Self` is implementor type: `Sheep`
+    fn new(in_name: &'static str) -> Sheep {
+        Sheep {
+            naked: false,
+            name: in_name,
+        }
+    }
+    fn name(&self) -> &'static str {
+        self.name
+    }
+    fn noise(&self) -> &'static str {
+        if self.is_naked() {
+            "baaaaaah?"
+        } else {
+            "beeeeeeeh!!"
+        }
+    }
+    // Defualt trait method can overridden
+    fn talk(&self) {
+        // for example we can add some quite contemplation.
+        println!("{} pouses briefly....{}", self.name, self.noise());
+    }
 }
 fn main() {
-    let number_list = vec![34, 43, 23, 56, 75, 23];
-    let result = largest(&number_list);
-    println!("The lareges intger is {result}");
-    let char_list = vec!['a', 'z', 'p', 'o', 'w', 'v', 'P'];
-    let result = largest(&char_list);
-    println!("The lareges intger is {result}");
-    let float = Point { _x: 1.0, _y: 23.2 };
-    let p = Point { _x: 55.0, _y: 23.2 };
-    let intger = Point { _x: 10, _y: 3 };
-    let will_work = Point { _x: 11, _y: 10 };
-    println!("{float:#?}<->{intger:#?}<-> {will_work:#?}");
-    println!("{} -> {:#?}", p.x(), p.distance_from_origin());
+    // type annotations is necessary in theis cause.
+    let mut dolly: Sheep = Animal::new("Dooly");
+    dolly.talk();
+    dolly.shear();
+    dolly.talk();
 }
