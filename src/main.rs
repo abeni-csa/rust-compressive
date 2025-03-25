@@ -2,6 +2,9 @@ struct Sheep {
     naked: bool,
     name: &'static str,
 }
+struct SheepQ {}
+struct CowQ {}
+
 trait Animal {
     // Associated function signature; `Self` refes to the implemetor type
     fn new(name: &'static str) -> Self;
@@ -13,6 +16,32 @@ trait Animal {
         println!("{} says {}", self.name(), self.noise())
     }
 }
+
+trait AnimalQ {
+    fn noise(&self) -> &'static str;
+}
+// Implemet the `AnimalQ` trait for `SheepQ`
+impl AnimalQ for SheepQ {
+    fn noise(&self) -> &'static str {
+        "baaaaaaaaaah!"
+    }
+}
+// Implemet the `AnimalQ` trait for `CowQ`
+impl AnimalQ for CowQ {
+    fn noise(&self) -> &'static str {
+        "mooooooooooh!"
+    }
+}
+// Return some Struct that implements Animal,
+// but we don't Know which one at compile time
+fn random_animal(random_number: f64) -> Box<dyn AnimalQ> {
+    if random_number < 0.5 {
+        Box::new(SheepQ {})
+    } else {
+        Box::new(CowQ {})
+    }
+}
+
 impl Sheep {
     fn is_naked(&self) -> bool {
         self.naked
@@ -58,4 +87,12 @@ fn main() {
     dolly.talk();
     dolly.shear();
     dolly.talk();
+    let rar_number = 0.234;
+    let animal = random_animal(rar_number);
+    println!(
+        "You've randomly Chosen an animal, \
+        and it says {}
+        ",
+        animal.noise()
+    );
 }
