@@ -1,3 +1,5 @@
+use rand::Rng;
+
 struct Sheep {
     naked: bool,
     name: &'static str,
@@ -34,8 +36,8 @@ impl AnimalQ for CowQ {
 }
 // Return some Struct that implements Animal,
 // but we don't Know which one at compile time
-fn random_animal(random_number: f64) -> Box<dyn AnimalQ> {
-    if random_number < 0.5 {
+fn random_animal(random_number: i64) -> Box<dyn AnimalQ> {
+    if random_number < 5 {
         Box::new(SheepQ {})
     } else {
         Box::new(CowQ {})
@@ -87,7 +89,7 @@ fn main() {
     dolly.talk();
     dolly.shear();
     dolly.talk();
-    let rar_number = 0.234;
+    let rar_number = rand::rng().random_range(0..10);
     let animal = random_animal(rar_number);
     println!(
         "You've randomly Chosen an animal, \
