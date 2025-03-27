@@ -9,7 +9,7 @@ struct FooBar;
 struct BarFoo;
 // The `std::opp::Add` trait is used to sepcify the functionaltiey of `+`
 // Here, we make `Add<Bar>` - the trait for addition with RHS of type `Foo`
-// This block implements teh opration: Bar + Foo = BarFOo
+// This block implements teh opration: Bar + Foo = BarFoo
 
 impl ops::Add<Bar> for Foo {
     type Output = FooBar;
