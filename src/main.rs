@@ -1,4 +1,4 @@
 #[actix_web::web]
-fn main() {
+async fn main() {
     println!("Hello, world!");
 }
