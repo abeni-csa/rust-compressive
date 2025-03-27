@@ -1,4 +1,4 @@
-#[actix_rt::test]
+#[actix_web::web]
 fn main() {
     println!("Hello, world!");
 }
